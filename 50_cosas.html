@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Te quiero, amor <3</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f8ff;
+            background-image: url('img/bg2.jpg');
+            background-size: auto;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .title {
+            color: #ff4081;
+            text-align: center;
+            margin: 3rem;
+            font-size: xx-large;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        li {
+            width: 15rem;
+            height: 15rem;
+            background-color: #ffeb3b;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        li:hover {
+            transform: scale(1.1);
+        }
+        li img {
+            width: 10rem;
+            /* height: 10rem; */
+            margin-bottom: 10px;
+            border-radius: 1rem;
+        }
+        li span {
+            font-size: 1.2em;
+            color: #000;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            z-index: 10;
+            text-align: center;
+        }
+        .popup img {
+            border-radius: 1rem;
+            width: 100%;
+            /* height: 100px; */
+        }
+        .popup p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #03a9f4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        @media (max-width: 700px) {
+            .popup img {
+                width: 20rem;    
+            }
+        }
+    </style>
+</head>
+<body>
+    <p class="title"><strong>50 COSAS QUE ME GUSTAN DE TI, AMOR :)</strong></p>
+    <ul id="lista">
+        <!-- Los ítems se generarán dinámicamente -->
+    </ul>
+
+    <!-- Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <img id="popup-img" src="" alt="Imagen">
+        <p id="popup-text"></p>
+        <button onclick="hidePopup()">Cerrar</button>
+    </div>
+
+    <script>
+        const cosasQueMeGustan = [
+            {"numero": 1, "texto": "Tus ojos, ahhh que hermosos ojitos tienes c:", "imagen": "img/ojitos.jpg"},
+            {"numero": 2, "texto": "Tu cabello, me encanta en cualquier forma, me gusta mucho c:", "imagen": "img/cabellito.jpeg"},
+            {"numero": 3, "texto": "Tu naricita, ahhh es que se ve tan linda y siempre me dan ganas de darle besitos (siento que no te gustan mucho jaja)", "imagen": "img/nariz.jpg"},
+            {"numero": 4, "texto": "Tus lindos labios, ahhh tan lindos, tan ricos jsjs, me gustan mucho, si no te pones labial se ven lindos, pero cuando te estás poniendo el labial, uff, me encanta como te ves poniendolo y siempre me aguanto las ganas de darte de besotes ahhhh", "imagen": "img/labios.jpg"},
+            {"numero": 5, "texto": "Tus cachetitos, son tan pero tan lindos que me dan ganas de apretarlos mucho, pero en su lugar te doy muchos besitos y hay veces que no me aguanto y por eso te muerdo o te lamo un cachete jaja c:", "imagen": "img/cachetitos.jpg"},
+            {"numero": 6, "texto": "Me gustan mucho tus colmillos, se me hacen muy tiernos, es algo tan pero tan lindo :'3", "imagen": "img/colmillos.jpeg"},
+            {"numero": 7, "texto": "Me gusta mucho tu carita, es un universo lleno de maravillas porque ahí se encuentran tus ojitos hermosos. Me encanta cómo luces siempre :'3 <3", "imagen": "img/carita.jpeg"},
+            {"numero": 8, "texto": "Esto es algo que desde que te conozco me encanta de ti, me gusta mucho tu personalidad, es tan waooo, tan linda, tan llena de energía, brillas demasiado y eso me gusta c:", "imagen": "img/estrella.webp"},
+            {"numero": 9, "texto": "Esto es de siempre, desde que tengo memoria me gusta de ti. Cuando entrenabamos, siempre te esforzabas mucho y eso me agradaba tanto de ti, siempre he sido tu fan en ese aspecto c:", "imagen": "img/yessi_1.jpeg"},
+            {"numero": 10, "texto": "Cuando comezamos a salir, me comenzó a gustar mucho cómo me tratabas, siempre has sido muy linda conmigo pero comenzaste a ser demasiado linda conmigo, me hacías sentir muy bien, me dabas animos y me hacías reír mucho. Todo eso me enamoró de ti y ahora son cosas que me encantan de ti :'3 <3", "imagen": "img/nosotros_1.jpg"},
+            {"numero": 11, "texto": "Ahhhh tu sonrisa, ahhhhh tu bella y tan hermosa sonrisa reluciente c:, como me encanta cuando sonríes. Dicen que si haces sonreír a alguien lo puedes enamorar, pero cuando tú sonries yo me enamoro más de ti. Tu sonrisa me hace tan feliz y me llena de mucha alegría y de mucho amor :'3", "imagen": "img/sonrisa.jpeg"},
+            {"numero": 12, "texto": "Me gusta que a veces haces caritas chistosas, es muy gracioso, me haces muy feliz porque eres muy divertida y me encanta que seas así, siempre tan llena de vida, sé que no siempre puedes estar así, pero admiro cada que estás así de feliz, aprecio cada momento juntos <3 c:", "imagen": "img/carita_chistosa.jpeg"},
+            {"numero": 13, "texto": "Antes de ser novios me gustaba mucho que eres tan detallista, que de pronto llegabas con una sorpresa (no es necesario que me regales cosas, pero se me hace algo muy lindo c:). Con todo me haces muy feliz, con las notitas, con dulces que me regalas, con los muñequuitos, con las canciones que me mandas, es algo tan lindo que seas así conmigo :'3 <3", "imagen": "img/detalles.jpeg"},
+            {"numero": 14, "texto": "Cuando comenzamos a hablar nos mandabamos muchas canciones, fue algo que comenzó a enamorarme de ti, de alguna forma me gusta lo que escuchas y muchas ocasiones me mandabas canciones muy lindas que aprecio tanto c:", "imagen": "img/zoe.jpeg"},
+            {"numero": 15, "texto": "Me gusta que me recuerdes en las cosas más sencillas, en las más lindas, en muchas cosas, me haces sentir muy especial y es algo tan lindo que te acuerdes de mí en varias cosas y que me digas: 'me acordé de ti por esto'. Como con las canciones de Enjambre, con ciertas canciones que te parecen, con incluso memes que ves y de pronto te acuerdas de mí, con las historias que te he contado, con vídeos bonitos y de todo tipo que me mandas, es algo tan lindo que se convirtió en algo muy especial para mí :'3", "imagen": "img/abeja.jpeg"},
+            {"numero": 16, "texto": "Me gusta que tenemos muchas cosas que podemos compartir, como la música, los gustos por los gatitos, los gustos por 31 minutos, entre muchas cosas, yo sé que tenemos diferencias en ciertos gustos, pero se me hace muy especial compartir tus gustos y lo míos, aunque a veces difieran c:", "imagen": "img/tuliofeo.jpg"},
+            {"numero": 17, "texto": "Uy algo que me encanta de ti, es que nunca nos aburrimos porque siempre tienes un plan para algo, como hacer los debates, exponer temas, karaoke, ciertas cosas que en realidad no se me ocurrirían a mí, me encata que tengas tanta imaginación para no aburrirnos y hacer muchas cositas (nos falta hacer mucho jajaja). Me gusta que incluso a veces no tenemos un plan y de pronto en el momento se te ocurre algo divertido por hacer (perdón por ser tan aburrido y no pensar en muchos planes :'c). Eres como el taller de 31 minutos c:", "imagen": "img/Taller.jpg"},
+            {"numero": 18, "texto": "Ohhh algo que siempre me ha gustado de ti es tu estilo, me encanta como vistes, siempre te ves tan linda con lo que usas c:, siento que siempre te ves muy bien y me encanta cómo vistes c:", "imagen": "img/estilo.jpeg"},
+            {"numero": 19, "texto": "", "imagen": ""},
+            {"numero": 20, "texto": "", "imagen": ""},
+            {"numero": 21, "texto": "", "imagen": ""},
+            {"numero": 22, "texto": "", "imagen": ""},
+            {"numero": 23, "texto": "", "imagen": ""},
+            {"numero": 24, "texto": "", "imagen": ""},
+            {"numero": 25, "texto": "", "imagen": ""},
+            {"numero": 26, "texto": "", "imagen": ""},
+            {"numero": 27, "texto": "", "imagen": ""},
+            {"numero": 28, "texto": "", "imagen": ""},
+            {"numero": 29, "texto": "", "imagen": ""},
+            {"numero": 30, "texto": "", "imagen": ""},
+            {"numero": 31, "texto": "", "imagen": ""},
+            {"numero": 32, "texto": "", "imagen": ""},
+            {"numero": 33, "texto": "", "imagen": ""},
+            {"numero": 34, "texto": "", "imagen": ""},
+            {"numero": 35, "texto": "", "imagen": ""},
+            {"numero": 36, "texto": "", "imagen": ""},
+            {"numero": 37, "texto": "", "imagen": ""},
+            {"numero": 38, "texto": "", "imagen": ""},
+            {"numero": 39, "texto": "", "imagen": ""},
+            {"numero": 40, "texto": "", "imagen": ""},
+            {"numero": 41, "texto": "", "imagen": ""},
+            {"numero": 42, "texto": "", "imagen": ""},
+            {"numero": 43, "texto": "", "imagen": ""},
+            {"numero": 44, "texto": "", "imagen": ""},
+            {"numero": 45, "texto": "", "imagen": ""},
+            {"numero": 46, "texto": "", "imagen": ""},
+            {"numero": 47, "texto": "", "imagen": ""},
+            {"numero": 48, "texto": "", "imagen": ""},
+            {"numero": 49, "texto": "", "imagen": ""},
+            {"numero": 50, "texto": "", "imagen": ""},
+        ];
+
+        function generarLista() {
+            const lista = document.getElementById('lista');
+            cosasQueMeGustan.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<img src="${item.imagen}" alt="Imagen ${item.numero}">
+                                <span>${item.numero}</span>`;
+                li.addEventListener('click', () => showPopup(item.texto, item.imagen));
+                lista.appendChild(li);
+            });
+        }
+
+        function showPopup(texto, imagen) {
+            document.getElementById('popup-text').innerText = texto;
+            document.getElementById('popup-img').src = imagen;
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Generar la lista al cargar la página
+        window.onload = generarLista;
+    </script>
+</body>
+</html>
